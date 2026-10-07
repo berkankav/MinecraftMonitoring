@@ -26,5 +26,21 @@ namespace MinecraftMonitoring.Controllers
                 ContainerName = "minecraft"
             });
         }
+
+        [HttpGet("stats")]
+        public async Task<ActionResult<ContainerStats>> GetStats()
+        {
+            var stats = await _dockerService.GetMinecraftStatsAsync();
+
+            if (stats == null)
+            {
+                return NotFound(new
+                {
+                    message = "Minecraft container is not running."
+                });
+            }
+
+            return Ok(stats);
+        }
     }
 }
